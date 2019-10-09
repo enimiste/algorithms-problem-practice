@@ -1,4 +1,4 @@
-package com.nouni.projecteuler.AmicableNumbers;
+package com.nouni.projecteuler.amicableNumbers;
 
 import java.util.*;
 import java.util.Map.Entry;

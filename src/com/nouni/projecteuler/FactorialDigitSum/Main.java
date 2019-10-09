@@ -1,4 +1,4 @@
-package com.nouni.projecteuler.FactorialDigitSum;
+package com.nouni.projecteuler.factorialDigitSum;
 
 import java.math.BigInteger;
 import java.util.Arrays;

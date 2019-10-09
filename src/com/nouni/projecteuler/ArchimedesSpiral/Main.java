@@ -1,4 +1,4 @@
-package com.nouni.projecteuler.ArchimedesSpiral;
+package com.nouni.projecteuler.archimedesSpiral;
 
 public class Main {
 

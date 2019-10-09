@@ -1,4 +1,4 @@
-package com.nouni.projecteuler.LargestPrimeFactor;
+package com.nouni.projecteuler.largestPrimeFactor;
 
 import java.util.*;
 import java.util.function.BiFunction;

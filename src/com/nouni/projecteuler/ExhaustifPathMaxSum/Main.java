@@ -1,4 +1,4 @@
-package com.nouni.projecteuler.ExhaustifPathMaxSum;
+package com.nouni.projecteuler.exhaustifPathMaxSum;
 
 import java.util.*;
 import java.util.stream.*;

@@ -1,4 +1,4 @@
-package com.nouni.projecteuler.NonAbundantSums;
+package com.nouni.projecteuler.nonAbundantSums;
 
 import java.util.HashSet;
 import java.util.Iterator;

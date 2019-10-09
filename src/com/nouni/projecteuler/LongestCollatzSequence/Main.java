@@ -1,4 +1,4 @@
-package com.nouni.projecteuler.LongestCollatzSequence;
+package com.nouni.projecteuler.longestCollatzSequence;
 
 import java.util.HashMap;
 import java.util.Map;
