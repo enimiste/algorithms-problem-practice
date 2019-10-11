@@ -7,8 +7,8 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class Main {
-	static final Integer MAX_TERMS = Integer.MAX_VALUE;//To avoid infinite stream
-	
+	static final Integer MAX_TERMS = Integer.MAX_VALUE;// To avoid infinite stream
+
 	public static void main(String[] args) {
 		final int divs = 500;
 		findTriangular(divs).ifPresent(System.out::println);
@@ -22,20 +22,16 @@ public class Main {
 	 */
 	private static Optional<R> findTriangular(int divsCount) {
 		DivisorsFinder df = new MyDivisorsFinder();
-		return terms()
-				.limit(MAX_TERMS)
-				.map(t -> t.factories(df))
-				.filter(t -> t.hasOverDivsSize(divsCount + 1))
-				.findFirst()
-				.map(t -> R.as(t.nth, t.n, t.divs));
+		return terms().limit(MAX_TERMS).map(t -> t.factories(df)).filter(t -> t.hasOverDivsSize(divsCount + 1))
+				.findFirst().map(t -> R.as(t.nth, t.n, t.divs));
 	}
 
 	static Stream<Term> terms() {
 		return Stream.iterate(Term.initial(), (x) -> x.next());
 	}
 
- 	static class R {
-		protected long nth;//rang
+	static class R {
+		protected long nth;// rang
 		protected long n;
 		protected int[] divs;
 
@@ -55,10 +51,10 @@ public class Main {
 		int divsSize() {
 			return divs == null ? 0 : (divs.length - 1);
 		}
-		
+
 		String formatDivs() {
 			StringBuilder sb = new StringBuilder();
-			for(int i : divs) {
+			for (int i : divs) {
 				sb.append(i).append(", ");
 			}
 			return sb.toString();
@@ -71,8 +67,8 @@ public class Main {
 	}
 
 	static class Term {
-		int nth;//rang
-		int[] divs;//divisors
+		int nth;// rang
+		int[] divs;// divisors
 		long n;// Xn
 		protected long x;// Xn-1
 		protected long y;// Xn-2
@@ -118,15 +114,15 @@ public class Main {
 			return this;
 
 		}
-		
+
 		int getDivsSize() {
 			return divs == null ? 0 : divs.length;
 		}
-		
+
 		boolean hasOverDivsSize(int size) {
 			return getDivsSize() >= size;
 		}
-		
+
 		Term factories(DivisorsFinder df) {
 			divs = df.find(n);
 			return this;
@@ -137,28 +133,28 @@ public class Main {
 			return String.format("T(nth=%d, n=%d, n-1=%d, n-2=%d)", nth, n, x, y);
 		}
 	}
-	
+
 	static interface DivisorsFinder {
 		int[] find(long n);
 	}
-	
+
 	static class MyDivisorsFinder implements DivisorsFinder {
 
 		@Override
 		public int[] find(long n) {
-			int sn = (int)Math.sqrt(n), j = 0;
+			int sn = (int) Math.sqrt(n), j = 0;
 			Set<Integer> set = new HashSet<>(sn * 2);
-			for(int i = 1; i <= sn; i++) {
-				if(n % i == 0) {
+			for (int i = 1; i <= sn; i++) {
+				if (n % i == 0) {
 					set.add(i);
 					set.add((int) (n / i));
 				}
 			}
 			int[] divs = new int[set.size()];
-			for(Integer x : set) {
+			for (Integer x : set) {
 				divs[j++] = x;
 			}
-			
+
 			return divs;
 		}
 	}

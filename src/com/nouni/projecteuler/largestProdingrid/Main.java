@@ -52,11 +52,10 @@ public class Main {
 		int k;
 		int t;
 		/* mini, maxi, minj, maxj */
-		int[][] sides = new int[][] {
-				new int[] { i, i, j, j + s - 1 }, // right
+		int[][] sides = new int[][] { new int[] { i, i, j, j + s - 1 }, // right
 				new int[] { i, i + s - 1, j, j + s - 1 }, // diag down right
-				new int[] { i, i + s - 1, j, j },// down
-				new int[] { i, i + s - 1, j - s + 1 , j},// diag down left
+				new int[] { i, i + s - 1, j, j }, // down
+				new int[] { i, i + s - 1, j - s + 1, j },// diag down left
 		};
 		// right, diag down right and down can scan all of the grid
 		for (int[] side : sides) {
@@ -75,15 +74,15 @@ public class Main {
 						break;
 				}
 			} else {
-				if(j <= side[2]) {
+				if (j <= side[2]) {
 					k = side[0];
 					t = side[2];
 					for (; k <= side[1] & t <= side[3];) {
 						tmp.multi(k, t, getValueFromGrid(grid, n, k, t, 0));
 						if (tmp.p == 0)
 							break;
-						 k++;
-						 t++;
+						k++;
+						t++;
 					}
 				} else {
 					k = side[0];
@@ -92,20 +91,22 @@ public class Main {
 						tmp.multi(k, t, getValueFromGrid(grid, n, k, t, 0));
 						if (tmp.p == 0)
 							break;
-						 k++;
-						 t--;
+						k++;
+						t--;
 					}
 				}
 			}
-			//if(tmp.p != 0) System.out.println(tmp);
+			// if(tmp.p != 0) System.out.println(tmp);
 			if (max.p < tmp.p)
 				max.update(tmp);
 		}
 		return max;
 	}
-	
+
 	static void check(int[] x) {
-		if(x.length != 4 || x[0] > x[1] || x[2] > x[3]) throw new RuntimeException(String.format("Invalid sides description : [%d, %d, %d, %d]", x[0], x[1], x[2], x[3]));
+		if (x.length != 4 || x[0] > x[1] || x[2] > x[3])
+			throw new RuntimeException(
+					String.format("Invalid sides description : [%d, %d, %d, %d]", x[0], x[1], x[2], x[3]));
 	}
 
 	/**
@@ -124,8 +125,7 @@ public class Main {
 	}
 
 	static int[][] grid() {
-		int[][] g = new int[][] { 
-				new int[] { 8, 2, 22, 97, 38, 15, 0, 40, 0, 75, 4, 5, 7, 78, 52, 12, 50, 77, 91, 8 },
+		int[][] g = new int[][] { new int[] { 8, 2, 22, 97, 38, 15, 0, 40, 0, 75, 4, 5, 7, 78, 52, 12, 50, 77, 91, 8 },
 				new int[] { 49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48, 4, 56, 62, 0 },
 				new int[] { 81, 49, 31, 73, 55, 79, 14, 29, 93, 71, 40, 67, 53, 88, 30, 3, 49, 13, 36, 65 },
 				new int[] { 52, 70, 95, 23, 4, 60, 11, 42, 69, 24, 68, 56, 1, 32, 56, 71, 37, 2, 36, 91 },
@@ -155,10 +155,10 @@ public class Main {
 		}
 		System.out.println("]");
 	}
-	
+
 	/**
-	 * Result serie element
-	 * Used by the R class
+	 * Result serie element Used by the R class
+	 * 
 	 * @author e.nouni
 	 *
 	 */
@@ -166,7 +166,7 @@ public class Main {
 		public int v;
 		public int i;
 		public int j;
-		
+
 		static S as(int i, int j, int v) {
 			S x = new S();
 			x.v = v;
@@ -174,15 +174,16 @@ public class Main {
 			x.j = j;
 			return x;
 		}
-		
+
 		@Override
 		public String toString() {
 			return String.format("(%d, %d, %d)", i, j, v);
 		}
-	} 
-	
+	}
+
 	/**
 	 * Result
+	 * 
 	 * @author e.nouni
 	 *
 	 */
@@ -190,37 +191,38 @@ public class Main {
 		public long p;
 		public S[] serie;
 		protected int idx = 0;
-		
+
 		static R as(long p, int s) {
 			R x = new R();
 			x.p = p;
 			x.serie = new S[s];
 			return x;
 		}
-		
+
 		void multi(int i, int j, int v) {
 			p *= v;
-			if(p < 0) throw new RuntimeException("Overflow " + this);
+			if (p < 0)
+				throw new RuntimeException("Overflow " + this);
 			serie[idx++] = S.as(i, j, v);
 		}
-		
+
 		void update(R r) {
 			p = r.p;
 			serie = r.serie;
 			idx = r.idx;
 		}
-		
+
 		void reset(long p) {
 			this.p = p;
 			serie = new S[serie.length];
 			idx = 0;
 		}
-		
+
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			sb.append(p).append(" : [");
-			for(S s : serie) {
+			for (S s : serie) {
 				sb.append(s).append(", ");
 			}
 			sb.append("]");

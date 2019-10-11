@@ -14,11 +14,12 @@ public class Main {
 	}
 
 	static long smallestMultiple(int from, int to) {
-		if(from > to) throw new RuntimeException("'from' should be less than or equal to 'to'");
-		
+		if (from > to)
+			throw new RuntimeException("'from' should be less than or equal to 'to'");
+
 		PowerDecomposition[] pds = new PowerDecomposition[to - from + 1];
 		int j = 0;
-		for(int i = from; i <= to; i++) {
+		for (int i = from; i <= to; i++) {
 			pds[j] = PowerDecomposition.ints(i);
 			j++;
 		}
@@ -79,7 +80,7 @@ interface PowerDecomposition {
 	Polynome multiply(Monome o);
 
 	Polynome multiply(Polynome o);
-	
+
 	/**
 	 * 
 	 * @param pds
@@ -87,7 +88,7 @@ interface PowerDecomposition {
 	 */
 	default Polynome multiply(PowerDecomposition... pds) {
 		Polynome res = Polynome.as();
-		for(PowerDecomposition p : pds) {
+		for (PowerDecomposition p : pds) {
 			res = res.multiply(p);
 		}
 		return res;
@@ -109,27 +110,32 @@ interface PowerDecomposition {
 			return ints.get(n);
 		throw new RuntimeException("No power decomposition found for " + n);
 	}
-	
+
 	/**
 	 * Less common multiplier
+	 * 
 	 * @param pds
 	 * @return
 	 */
 	static PowerDecomposition lcm(PowerDecomposition... pds) {
 		Map<Integer, Monome> res = new HashMap<>();
-		for(PowerDecomposition p : pds) {
-			if(p instanceof Monome) {
-				Monome m = (Monome)p;
+		for (PowerDecomposition p : pds) {
+			if (p instanceof Monome) {
+				Monome m = (Monome) p;
 				res.compute(m.p, (k, v) -> {
-					if(v == null) return m;
-					if(m.n > v.n) return m;
+					if (v == null)
+						return m;
+					if (m.n > v.n)
+						return m;
 					return v;
 				});
-			} else if(p instanceof Polynome) {
-				for(Monome m : ((Polynome) p).monomes()) {
+			} else if (p instanceof Polynome) {
+				for (Monome m : ((Polynome) p).monomes()) {
 					res.compute(m.p, (k, v) -> {
-						if(v == null) return m;
-						if(m.n > v.n) return m;
+						if (v == null)
+							return m;
+						if (m.n > v.n)
+							return m;
 						return v;
 					});
 				}
@@ -226,7 +232,7 @@ class Polynome implements PowerDecomposition {
 			v = Arrays.stream(pm).map(p -> p.value()).reduce(1L, (a, b) -> a * b);
 		return v;
 	}
-	
+
 	/**
 	 * @return
 	 */

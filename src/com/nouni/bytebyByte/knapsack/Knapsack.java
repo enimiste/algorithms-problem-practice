@@ -8,12 +8,9 @@ public class Knapsack {
 	public static void main(String[] args) {
 		System.out.println("Start");
 		int maxWeight = 5;
-		int[][] knaps = {
-				{1, 6},//{w,v}
-				{2, 10},
-				{3, 12}
-		};
-		
+		int[][] knaps = { { 1, 6 }, // {w,v}
+				{ 2, 10 }, { 3, 12 } };
+
 		Arrays.stream(knaps).map(Arrays::toString).forEach(System.out::println);
 		List<Knap> values = dp(Knap.as(knaps), new ArrayList<Knap>(), -1, 0, maxWeight);
 		values.forEach(System.out::println);
@@ -27,14 +24,14 @@ public class Knapsack {
 	static class Knap {
 		public int w;
 		public int v;
-		
+
 		static Knap as(int w, int v) {
 			Knap k = new Knap();
 			k.w = w;
 			k.v = v;
 			return k;
 		}
-		
+
 		static Knap as(int[] arr) {
 			Knap k = new Knap();
 			k.w = arr[0];

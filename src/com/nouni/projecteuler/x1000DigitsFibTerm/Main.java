@@ -22,57 +22,62 @@ Value :
 Time : 1.178 sec
 */
 public class Main {
-    public static void main(String... args) {
-        int size = 1000;
-        Fib fb = new FibImpl();
-        fb.init(BigInteger.ONE, BigInteger.ONE);
-        
-        while(fb.size() < size) {
-            fb.next();
-        }
+	public static void main(String... args) {
+		int size = 1000;
+		Fib fb = new FibImpl();
+		fb.init(BigInteger.ONE, BigInteger.ONE);
 
-        System.out.println("Index : " + fb.index());
-        System.out.println("Size : " + fb.size());
-        System.out.println("Term : " + fb.current());
-    }
+		while (fb.size() < size) {
+			fb.next();
+		}
 
+		System.out.println("Index : " + fb.index());
+		System.out.println("Size : " + fb.size());
+		System.out.println("Term : " + fb.current());
+	}
 
-    static interface Fib {
-        void init(BigInteger x, BigInteger y);
-        Fib next();
-        BigInteger current();
-        int index();
-        int size();
-    }
+	static interface Fib {
+		void init(BigInteger x, BigInteger y);
 
-    static class FibImpl implements Fib {
-        protected BigInteger a;
-        protected BigInteger b;
-        protected int index;
+		Fib next();
 
-        public void init(BigInteger x, BigInteger y) {
-            this.a = x;
-            this.b = y;
-            this.index = 2;
-        }
+		BigInteger current();
 
-        public Fib next() {
-            BigInteger tmp = b.add(a);
-            this.a = b;
-            this.b = tmp;
-            this.index++;
+		int index();
 
-            return this;
-        }
+		int size();
+	}
 
-        public BigInteger current() {
-            return this.b;
-        }
+	static class FibImpl implements Fib {
+		protected BigInteger a;
+		protected BigInteger b;
+		protected int index;
 
-        public int index() {return this.index;}
+		public void init(BigInteger x, BigInteger y) {
+			this.a = x;
+			this.b = y;
+			this.index = 2;
+		}
 
-        public int size() {
-            return this.b.toString().length();
-        }
-    }
+		public Fib next() {
+			BigInteger tmp = b.add(a);
+			this.a = b;
+			this.b = tmp;
+			this.index++;
+
+			return this;
+		}
+
+		public BigInteger current() {
+			return this.b;
+		}
+
+		public int index() {
+			return this.index;
+		}
+
+		public int size() {
+			return this.b.toString().length();
+		}
+	}
 }
