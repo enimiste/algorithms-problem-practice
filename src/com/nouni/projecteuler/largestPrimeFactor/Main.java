@@ -1,127 +1,69 @@
 package com.nouni.projecteuler.largestPrimeFactor;
 
 import java.util.*;
-import java.util.function.BiFunction;
+
 
 public class Main {
+    public static void main(String... args) {
+        int[] n = largeNumber();
+        R p = findMaxProd(n, 13);
+        System.out.println(p);
+    }
 
-	public static void main(String[] args) {
-		double st = System.nanoTime();
-		run();
-		double et = System.nanoTime();
-		double dt = (et - st)/1000;
-		dt /= 1000;
-		dt /= 1000;
-		System.out.println("Excution time in secs: " + dt);
-	}
-	
-	static void run(String... args) {
-		long n = Long.MAX_VALUE;
-		System.out.println(n);
-		//largestPrimeFactor(n).ifPresent(System.out::println);
-		//System.out.println(largestPrimeFactor2(n));
-		//System.out.println(largestPrimeFactor3(n));
-	}
-	
-	/**
-	 * 
-	 * @param n
-	 * @return
-	 */
-	static Integer largestPrimeFactor2(long n) {
-		Integer lf = 1, f = 3;
-		BiFunction<Long, Integer, Long> remove = (x, p) -> {
-			do {
-				x = x / p;
-			} while(x % p == 0);
-			return x;
-		};
-		if(n % 2 == 0) {
-			n = remove.apply(n, 2);
-			lf = 2;
-		}
-		while(n > 1) {
-			if(n % f == 0) {
-				n = remove.apply(n, f);
-				lf = f;
-			}
-			f += 2;
-		}
-		return lf;
-	}
-	
-	/**
-	 * 
-	 * @param n
-	 * @return
-	 */
-	static Integer largestPrimeFactor3(long n) {
-		Integer lf = 1, f = 3;
-		long sqn;
-		BiFunction<Long, Integer, Long> remove = (x, p) -> {
-			do {
-				x = x / p;
-			} while(x % p == 0);
-			return x;
-		};
-		if(n % 2 == 0) {
-			n = remove.apply(n, 2);
-			lf = 2;
-		}
-		sqn = (long)Math.sqrt(n);
-		while(n > 1 && f <= sqn) {
-			if(n % f == 0) {
-				n = remove.apply(n, f);
-				lf = f;
-				sqn = (long)Math.sqrt(n);
-			}
-			f += 2;
-		}
-		return (int) ((n == 1) ? lf : n);
-	}
-	
-	/**
-	 * 
-	 * @param n
-	 * @return
-	 */
-	static Optional<Integer> largestPrimeFactor(long n) {
-		Integer[] primes = primes((int)Math.sqrt(n));
-		for(int i = primes.length - 1; i >= 0; i--) {
-			if(n % primes[i]==0) {
-				return Optional.of(primes[i]);
-			}
-		}
-		return Optional.empty();
-	}
-	
-	static Integer[] primes(int max) {
-		Integer[] primes = new Integer[max];
-		int i = 0, p = 3;
-		primes[i++] = 2;
-		boolean div;
-		while(p <= max) {
-			div = false;
-			for(int j = 0; j < i; j++) {
-				if(p % primes[j] == 0) {
-					div = true;
-					break;
-				}
-			}
-			if(!div) primes[i++] = p;
-			p+=2;
-		}
-		return Arrays.copyOfRange(primes, 0, i);
-	}
-	
-	static String format(Object[] os) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
-		for(Object o : os) {
-			sb.append(o).append(",");
-		}
-		sb.append("]");
-		return sb.toString();
-	}
+    /**
+     * @param lN large number
+     * @param w windows size
+     * 
+     * @return largest product
+     */
+    static R findMaxProd(int[] lN, int w) {
+        int l = lN.length, i = 0, j = w -1;
+        R r = new R();
+        long p;
+        while(j < l) {
+            p = 1;
+            for(int k = i; k <= j; k++) {
+                p *= lN[k];
+            }
+            if(r.n < p) {
+                r.n = p;
+                r.ns = Arrays.copyOfRange(lN, i, j + 1);
+            }
+            i++;
+            j++;
+        }
 
+        return r;
+    }
+
+    static int[] largeNumber() {
+        String s = "7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450";
+        int[] arr = new int[s.length()];
+        short i = 0;
+        for(char c : s.toCharArray()) {
+            arr[i++] = (int)Integer.valueOf(c + "");
+        }
+        return arr;
+    }
+
+    static void showNumber(int[] arr) {
+        for(int c : arr) {
+            System.out.print(c);
+        }
+        System.out.println("");
+    }
+
+    static class R {
+        public long n = 0L;
+        public int[] ns = new int[]{};
+
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append(n).append(" : ");
+            for(int i : ns) {
+                sb.append(i);
+            }
+            return sb.toString();
+        }
+    }
 }
