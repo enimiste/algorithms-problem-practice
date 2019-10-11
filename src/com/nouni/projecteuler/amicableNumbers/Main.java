@@ -1,77 +1,70 @@
 package com.nouni.projecteuler.amicableNumbers;
 
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
+
 
 public class Main {
+    public static void main(String... args) {
+        int max = 10000;
+        
+        System.out.println(amicalNumbersSum(max));
+    }
 
-	public static void main(String[] args) {
-		int max = 400;
-		int sum = sumOfAllAmicalNums(max);
-		System.out.println(sum);
-		/*st.forEach((e) -> {
-			System.out.println("> " + e.getKey());
-			e.getValue().forEach(x -> System.out.println(" - " + x.getKey()));
-		});*/
-	}
-	
-	static int sumOfAllAmicalNums(int max) {
-		Stream<Entry<Integer, List<Entry<Integer, Integer>>>> st = amicalNumbersGroups(max);
-		return st.sorted((e1, e2) -> e1.getKey() - e2.getKey())
-				.mapToInt(e -> e.getValue()
-						.stream()
-						.map(x -> x.getKey())
-						.reduce(0, Integer::sum))
-				.reduce(0, Integer::sum);
-	}
+    static int amicalNumbersSum(int max) {
+        Map<Integer, Integer> r = amicalNumbers(max);
 
-	static Stream<Entry<Integer, List<Entry<Integer, Integer>>>> amicalNumbersGroups(int max) {
-		return divisorsSum(max)
-				.entrySet()
-				.stream()
-				.collect(Collectors.groupingBy((e) -> e.getValue()))
-				.entrySet()
-				.stream();
-				//.filter(e -> e.getValue().size() >= 2 && e.getKey() != 1);*/
-	}
+        return r.entrySet().stream().mapToInt((e) -> e.getValue() + e.getKey()).reduce(0, Integer::sum);
+    }
 
-	static Map<Integer, Integer> divisorsSum(int max) {
-		Map<Integer, Integer> res = new HashMap<>(max);
-		while(max > 1) {
-			res.put(max, sum(divisors(max)));
-			max--;
-		}
-		return res;
-	}
-	
-	static int sum(int... xs) {
-		int sum = 0;
-		for(int x : xs) {
-			sum += x;
-		}
-		return sum;
-	}
-	
-	//all divisors except n it self
-	static int[] divisors(int n) {
-		int sqn = n / 2;
-		int[] ds = new int[sqn];
-		int i = 0;
-		ds[i++] = 1;
-		for(int j = 2; j <= sqn; j++) {
-			if(n % j == 0) ds[i++] = j;
-		}
-		return Arrays.copyOfRange(ds, 0, i);
-	}
-	
-	static void show(int[] xs) {
-		System.out.print("[");
-		for(int x : xs) {
-			System.out.print(x + ", ");
-		}
-		System.out.print("]");
-	}
+    static Map<Integer, Integer> amicalNumbers(int max) {
+        Map<Integer, Integer> s = divisorsSum(max);
+        Map<Integer, Integer> r = new HashMap<>();
+        for(Integer k1 : s.keySet()) {
+            Integer v1 = s.get(k1);
+            if(k1.intValue() != v1.intValue() && s.containsKey(v1)) {
+                Integer v2 = s.get(v1);
+                if(k1.intValue() == v2.intValue()) {
+                    r.put(Math.min(k1, v1), Math.max(k1, v1));
+                    
+                }
+            }
+        }
+        return r;
+    }
 
+    static Map<Integer, Integer> divisorsSum(int max) {
+        return Stream.iterate(2, (x) -> x <= max, (x) -> x + 1)
+            .map(x -> new Integer[]{x, sum(divisors(x))})
+            .filter(e -> e[1] <= max && e[1] > 1)
+            .collect(Collectors.toMap((x) -> x[0], (x) -> x[1]));
+    }
+
+    static int sum(int... xs) {
+        int s = 0;
+        for(int x : xs) {
+            s += x;
+        }
+        return s;
+    }
+
+
+    static int[] divisors(int n) {
+        int size = n / 2;
+        int[] ds = new int[size + 1];
+        int i = 0;
+        ds[i++] = 1;
+        for(int j = 2; j <= size; j++) {
+            if(n % j == 0) ds[i++] = j;
+        }
+        return Arrays.copyOfRange(ds, 0, i);
+    }
+
+    static void show(int[] xs) {
+        System.out.print("[");
+        for(int x : xs) {
+            System.out.print(x + ", ");
+        }
+        System.out.println("]");
+    }
 }
