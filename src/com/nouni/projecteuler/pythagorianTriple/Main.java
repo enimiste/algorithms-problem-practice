@@ -1,7 +1,5 @@
 package com.nouni.projecteuler.pythagorianTriple;
 
-import java.util.*;
-
 public class Main {
 	public static void main(String... args) {
 		R r = foundPytha(1000 * 1000);

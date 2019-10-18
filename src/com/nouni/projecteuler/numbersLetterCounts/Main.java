@@ -5,7 +5,7 @@ import java.util.*;
 //java 11 : 21124 in 1.239 secs
 public class Main {
 
-	static final Map<Integer, L> LETTERS = new HashMap();
+	static final Map<Integer, L> LETTERS = new HashMap<Integer, L>();
 
 	static class L {
 		String txt;
