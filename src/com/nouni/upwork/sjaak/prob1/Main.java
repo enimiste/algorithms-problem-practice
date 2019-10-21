@@ -1,7 +1,9 @@
 package com.nouni.upwork.sjaak.prob1;
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -14,6 +16,7 @@ public class Main {
 	static final int MAX_NUMBER_OF_ELEMENTS = 10;
 
 	PrintStream out;
+	PrintStream logs;
 
 	boolean askSet(Scanner input, String question, Set set) {
 		do {
@@ -50,25 +53,116 @@ public class Main {
 	        before the last identifier instead of after it. Please correct this."
 	*/
 	private boolean inputContainsCorrectSet(Scanner input, Set set) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			String line = input.nextLine() + "|";//| EOL character; to avoid blocking on input when checking that extra chars exists after }
+			Scanner  in = new Scanner(line);
+			in.useDelimiter("");
+			ignoreSpaces(in);
+			if(!nextCharIs(in, '{')) {
+				throw new RuntimeException("Set definition should begin with an opening bracket");
+			}
+			nextChar(in);//to move to next char
+			ignoreSpaces(in);
+			if(!nextCharIs(in, '|') && !nextCharIs(in, '}')) {
+				String id = identifier(in);
+				set.add(id);
+				do {
+					ignoreSpaces(in);
+					if(!nextCharIs(in, '|') && !nextCharIs(in, '}')) {
+						id = identifier(in);
+						if(id != null) {
+							set.add(id);
+						} else {
+							throw new RuntimeException("Invalid identifier found. [A-Za-z][A-Za-z0-9]*");
+						}
+					} else break;
+				} while(true);
+			}
+			ignoreSpaces(in);
+			if(!nextCharIs(in, '}')) {
+				throw new RuntimeException("Set definition should end with a closing bracket");
+			}
+			nextChar(in);//to move to next char
+			ignoreSpaces(in);
+			if(!nextCharIs(in, '|') && nextCharIsLetter(in)) {
+				throw new RuntimeException("no input allowed after '}'");
+			}
+			return true;
+		} catch(RuntimeException e) {
+			error(e.getMessage());
+			return false;
+		}
 	}
+	
+	private String identifier(Scanner input) {
+		if(nextCharIsLetter(input)) {
+			StringBuffer sb = new StringBuffer();
+			sb.append(nextChar(input));
+			while(nextCharIsLetter(input) || nextCharIsDigit(input))
+			{
+				sb.append(nextChar(input));
+			}
+			return sb.toString();
+		} else throw new RuntimeException("Identifier should begin with a Letter.");
+		
+	}
+
+	/*
+	 * EBNF :
+	 * ======
+	 * SET 		::= '{' ELEMS '}'
+	 * ELEMS 	::= e | ID (',' ID)*
+	 * ID 		::= LETTER (LETTER | NUMBER)*
+	 * LETTER	::= [A-Za-z]
+	 * NUMBER	::= [0-9]
+	 */
+	
+	char nextChar (Scanner in) {
+		char c = in.next().charAt(0);
+		return c;
+	}
+	
+	boolean nextCharIs(Scanner in, char c) {
+		return in.hasNext(Pattern.quote(c+""));
+	}
+	
+	void ignoreSpaces(Scanner in) {
+		while(in.hasNext("\\s")) in.next();
+	}
+
+	boolean nextCharIsDigit (Scanner in) {
+		return in.hasNext("[0-9]");
+	}
+	
+	boolean nextCharIsLetter (Scanner in) {
+		return in.hasNext("[a-zA-Z]");
+	}
+
+	private void error(String msg) {
+		out.println(msg);
+	}
+	
 	private void calculateAndGiveOutput(Set set1, Set set2) {
-		// TODO Auto-generated method stub
-
+		out.println("Set A = " + set1);
+		out.println("Set B = " + set2);
+		out.println("difference (A - B): " + set1.diff(set2));
+		out.println("intersection (A*B): " + set1.intersection(set2));
+		out.println("union (A+B): " + set1.union(set2));
+		out.println("sym. diff (A|B): " + set1.symDiff(set2));
 	}
 
-	void start() {
+	void start() throws FileNotFoundException {
 		out = System.out;
 		Scanner in = new Scanner(System.in);
 		Set set1 = new Set(), set2 = new Set();
 
 		while (askBothSets(in, set1, set2)) {
 			calculateAndGiveOutput(set1, set2);
+			break;
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		(new Main()).start();
 	}
 
