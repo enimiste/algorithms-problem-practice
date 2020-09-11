@@ -1,83 +1,19 @@
 package com.nouni.upwork.sjaak.prob1;
 
-import java.util.TreeSet;
+import java.util.Collection;
 
-public class Set {
+public interface Set {
+    void add(Identifier id);
 
-	protected java.util.Set<String> data = new TreeSet<>();
+    boolean contains(Identifier id);
 
-	public void add(String id) {
-		data.add(id);
-	}
+    Set diff(Set set2);
 
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer("{");
-		data.forEach(s -> sb.append(s).append(" "));
-		sb.append('}');
-		return sb.toString();
-	}
+    Set intersection(Set set2);
 
-	/**
-	 * 
-	 * @param set2
-	 * @return
-	 */
-	public Set diff(Set set2) {
-		Set res = new Set();
-		data.forEach(s -> {
-			if (!set2.data.contains(s))
-				res.add(s);
-		});
-		return res;
-	}
+    Set union(Set set2);
 
-	/**
-	 * 
-	 * @param set2
-	 * @return
-	 */
-	public Set intersection(Set set2) {
-		Set res = new Set();
-		data.forEach(s -> {
-			if (set2.data.contains(s))
-				res.add(s);
-		});
-		set2.data.forEach(s -> {
-			if (data.contains(s))
-				res.add(s);
-		});
-		return res;
-	}
+    Set symDiff(Set set2);
 
-	/**
-	 * 
-	 * @param set2
-	 * @return
-	 */
-	public Set union(Set set2) {
-		Set res = new Set();
-		data.forEach(res::add);
-		set2.data.forEach(res::add);
-		return res;
-	}
-
-	/**
-	 * 
-	 * @param set2
-	 * @return
-	 */
-	public Set symDiff(Set set2) {
-		Set res = new Set();
-		data.forEach(s -> {
-			if (!set2.data.contains(s))
-				res.add(s);
-		});
-		set2.data.forEach(s -> {
-			if (!data.contains(s))
-				res.add(s);
-		});
-		return res;
-	}
-
+    Collection<Identifier> getElements();
 }
