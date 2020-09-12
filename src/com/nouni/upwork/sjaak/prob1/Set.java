@@ -1,7 +1,5 @@
 package com.nouni.upwork.sjaak.prob1;
 
-import java.util.Collection;
-
 public interface Set {
     void add(Identifier id);
 
@@ -15,5 +13,5 @@ public interface Set {
 
     Set symDiff(Set set2);
 
-    Collection<Identifier> getElements();
+    Identifier[] getElements();
 }

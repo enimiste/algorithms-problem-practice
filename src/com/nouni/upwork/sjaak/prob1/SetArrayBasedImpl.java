@@ -1,8 +1,5 @@
 package com.nouni.upwork.sjaak.prob1;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 /**
  * This implementation uses the String.compare function to check for equality
  * Otherwise equals for string checks object references equality
@@ -105,8 +102,11 @@ public class SetArrayBasedImpl implements Set {
     }
 
     @Override
-    public Collection<Identifier> getElements() {
-        return Arrays.asList(Arrays.copyOfRange(data, 0, currentPosition));
+    public Identifier[] getElements() {
+        Identifier[] ids = new Identifier[currentPosition];
+        for(int i = 0; i<currentPosition; i++)
+            ids[i] = data[i];
+        return ids;
     }
 
 

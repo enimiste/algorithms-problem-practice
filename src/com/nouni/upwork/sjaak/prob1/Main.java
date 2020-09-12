@@ -1,6 +1,5 @@
 package com.nouni.upwork.sjaak.prob1;
 
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Scanner;
 import java.util.regex.Pattern;
