@@ -40,31 +40,33 @@ public class Main {
         while (indx < INTEGER_COUNT) {
             if (in.hasNextInt()) {
                 int x = in.nextInt();
-                if (x >= INTEGER_MIN_VALUE && x <= INTEGER_MAX_VALUE)
+                if (x >= INTEGER_MIN_VALUE && x <= INTEGER_MAX_VALUE) {
                     items[indx++] = x;
-                else
+                    continue;
+                } else
                     System.out.println("Error : The typed integer " + x + " should be between " + INTEGER_MIN_VALUE + " and " + INTEGER_MAX_VALUE);
             } else
                 System.out.println("Error : Only integers are accepted");
+            in.nextLine();
         }
         return items;
     }
 
     private static int showMenu(Scanner in) {
-        System.out.println("Menu :");
-        System.out.println("=======");
-        System.out.println("1. Show the largest integer");
-        System.out.println("2. Show the smallest integer");
-        System.out.println("3. Show the sum of all integers");
-        System.out.println("4. Show the original array");
-        System.out.println("5. Exit the application");
-        System.out.println("Type your choice : ");
         do {
+            System.out.println("Menu :");
+            System.out.println("=======");
+            System.out.println("1. Show the largest integer");
+            System.out.println("2. Show the smallest integer");
+            System.out.println("3. Show the sum of all integers");
+            System.out.println("4. Show the original array");
+            System.out.println("5. Exit the application");
+            System.out.println("Type your choice : ");
             if (in.hasNextInt())
                 return in.nextInt();
             else
                 System.out.println("Error : You should type a choice number between 1 and 5");
-            showMenu(in);
+            in.nextLine();
         } while (true);
     }
 
